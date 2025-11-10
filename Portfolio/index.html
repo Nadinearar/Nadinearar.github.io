@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nadine - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: white;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            background: #f8f8f8;
+            color: #1a1a1a;
+            border: 2px solid #e0e0e0;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #e8e8e8;
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .portfolio-item.hidden {
+            display: none;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .portfolio-item {
+            border-radius: 15px;
+            overflow: hidden;
+            background: #f8f8f8;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .portfolio-info {
+            padding: 25px;
+        }
+
+        .portfolio-info h3 {
+            color: #1a1a1a;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .portfolio-info p {
+            color: #666;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            color: #667eea;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            font-weight: 500;
+        }
+
+        .project-link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: #764ba2;
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>My Portfolio</h1>
+                <p class="subtitle">A collection of my recent projects and work</p>
+                <a href="../index.html" class="back-button">← Back to Resume</a>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">All Projects</button>
+                <button class="filter-btn" data-filter="cad">CAD</button>
+                <button class="filter-btn" data-filter="characterization">Characterization</button>
+                <button class="filter-btn" data-filter="other">Other Works</button>
+            </div>
+
+            <div class="portfolio-grid">
+                <div class="portfolio-item" data-category="cad">
+                    <img src="https://via.placeholder.com/500x350/667eea/ffffff?text=CAD+Design+1" alt="CAD Design">
+                    <div class="portfolio-info">
+                        <h3>Mechanical Assembly Design</h3>
+                        <p>Complex mechanical assembly designed using CAD software with detailed component specifications and tolerance analysis.</p>
+                        <div class="tags">
+                            <span class="tag">SolidWorks</span>
+                            <span class="tag">AutoCAD</span>
+                            <span class="tag">3D Modeling</span>
+                        </div>
+                        <a href="#" class="project-link">View Project →</a>
+                    </div>
+                </div>
+
+                <div class="portfolio-item" data-category="characterization">
+                    <img src="https://via.placeholder.com/500x350/764ba2/ffffff?text=Characterization+Study" alt="Characterization">
+                    <div class="portfolio-info">
+                        <h3>Material Characterization Study</h3>
+                        <p>Comprehensive analysis of material properties including stress-strain testing, thermal analysis, and microscopy imaging.</p>
+                        <div class="tags">
+                            <span class="tag">Data Analysis</span>
+                            <span class="tag">Testing</span>
+                            <span class="tag">Python</span>
+                        </div>
+                        <a href="#" class="project-link">View Project →</a>
+                    </div>
+                </div>
+
+                <div class="portfolio-item" data-category="cad">
+                    <img src="https://via.placeholder.com/500x350/667eea/ffffff?text=CAD+Design+2" alt="CAD Project">
+                    <div class="portfolio-info">
+                        <h3>Product Enclosure Design</h3>
+                        <p>Custom product enclosure with ergonomic considerations, manufacturability analysis, and rendered visualizations.</p>
+                        <div class="tags">
+                            <span class="tag">Fusion 360</span>
+                            <span class="tag">Rendering</span>
+                            <span class="tag">Prototyping</span>
+                        </div>
+                        <a href="#" class="project-link">View Project →</a>
+                    </div>
+                </div>
+
+                <div class="portfolio-item" data-category="other">
+                    <img src="https://via.placeholder.com/500x350/764ba2/ffffff?text=Research+Project" alt="Other Work">
+                    <div class="portfolio-info">
+                        <h3>Technical Documentation</h3>
+                        <p>Comprehensive technical documentation and user guides for engineering projects with detailed illustrations and procedures.</p>
+                        <div class="tags">
+                            <span class="tag">Documentation</span>
+                            <span class="tag">Technical Writing</span>
+                            <span class="tag">Illustrator</span>
+                        </div>
+                        <a href="#" class="project-link">View Project →</a>
+                    </div>
+                </div>
+
+                <div class="portfolio-item" data-category="characterization">
+                    <img src="https://via.placeholder.com/500x350/667eea/ffffff?text=Device+Testing" alt="Characterization Project">
+                    <div class="portfolio-info">
+                        <h3>Device Performance Analysis</h3>
+                        <p>Electrical and optical characterization of semiconductor devices with automated measurement systems and data visualization.</p>
+                        <div class="tags">
+                            <span class="tag">MATLAB</span>
+                            <span class="tag">LabVIEW</span>
+                            <span class="tag">Measurement</span>
+                        </div>
+                        <a href="#" class="project-link">View Project →</a>
+                    </div>
+                </div>
+
+                <div class="portfolio-item" data-category="other">
+                    <img src="https://via.placeholder.com/500x350/764ba2/ffffff?text=Simulation" alt="Simulation Work">
+                    <div class="portfolio-info">
+                        <h3>Finite Element Analysis</h3>
+                        <p>Structural simulation and stress analysis using FEA software to optimize design and ensure safety factors.</p>
+                        <div class="tags">
+                            <span class="tag">ANSYS</span>
+                            <span class="tag">FEA</span>
+                            <span class="tag">Simulation</span>
+                        </div>
+                        <a href="#" class="project-link">View Project →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.getAttribute('data-filter');
+                    
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Filter portfolio items
+                    portfolioItems.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>
